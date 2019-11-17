@@ -48,7 +48,7 @@
             android:label="@string/preferences_settings"/>
 
         <activity
-            android:screenOrientation="userLandscape"
+            android:screenOrientation="sensorLandscape"
             android:name=".activities.EmulationActivity"
             android:theme="@style/DolphinEmulationBase"/>
 

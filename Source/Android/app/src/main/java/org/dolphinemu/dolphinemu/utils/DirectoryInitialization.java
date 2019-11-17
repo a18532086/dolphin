@@ -185,7 +185,7 @@ public final class DirectoryInitialization
 
   public static String getDolphinDirectory()
   {
-    return Environment.getExternalStorageDirectory().getPath() + File.separator + "dolphin-mmj";
+    return Environment.getExternalStorageDirectory().getPath() + File.separator + "dolphin-ZLYJ";
   }
 
   public static String getCacheDirectory()

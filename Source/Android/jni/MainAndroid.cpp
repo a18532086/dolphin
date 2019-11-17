@@ -504,7 +504,7 @@ JNIEXPORT jintArray JNICALL Java_org_dolphinemu_dolphinemu_NativeLibrary_getRunn
   (JNIEnv * env, jobject obj)
 {
   int i = 0;
-  int settings[14];
+  int settings[16];
 
   // gfx
   settings[i++] = Config::Get(Config::GFX_SHOW_FPS);
@@ -514,11 +514,14 @@ JNIEXPORT jintArray JNICALL Java_org_dolphinemu_dolphinemu_NativeLibrary_getRunn
   settings[i++] = Config::Get(Config::GFX_ENHANCE_ARBITRARY_MIPMAP_DETECTION);
   settings[i++] = Config::Get(Config::GFX_HACK_IMMEDIATE_XFB);
   settings[i++] = Config::Get(Config::GFX_DISPLAY_SCALE) * 100;
+  settings[i++] = Config::Get(Config::GFX_EFB_SCALE) - 1;
 
   // core
   settings[i++] = Config::Get(Config::MAIN_SYNC_ON_SKIP_IDLE);
+  settings[i++] = round(Config::Get(Config::MAIN_EMULATION_SPEED) * 100);
   settings[i++] = Config::Get(Config::MAIN_OVERCLOCK_ENABLE);
   settings[i++] = Config::Get(Config::MAIN_OVERCLOCK) * 100;
+
   settings[i++] = Config::Get(Config::MAIN_JIT_FOLLOW_BRANCH);
 
   // wii
@@ -549,17 +552,20 @@ JNIEXPORT void JNICALL Java_org_dolphinemu_dolphinemu_NativeLibrary_setRunningSe
   Config::Set(Config::LayerType::LocalGame, Config::GFX_ENHANCE_ARBITRARY_MIPMAP_DETECTION, settings[i++]);
   Config::Set(Config::LayerType::LocalGame, Config::GFX_HACK_IMMEDIATE_XFB, settings[i++]);
   Config::Set(Config::LayerType::LocalGame, Config::GFX_DISPLAY_SCALE, settings[i++] / 100.0f + FLT_EPSILON);
+  Config::Set(Config::LayerType::LocalGame, Config::GFX_EFB_SCALE, settings[i++] + 1);
 
   g_Config.Refresh();
   UpdateActiveConfig();
 
   // Main.Core
   Config::Set(Config::LayerType::LocalGame, Config::MAIN_SYNC_ON_SKIP_IDLE, settings[i++]);
+  Config::Set(Config::LayerType::LocalGame, Config::MAIN_EMULATION_SPEED, settings[i++] / 100.0f);
   Config::Set(Config::LayerType::LocalGame, Config::MAIN_OVERCLOCK_ENABLE, settings[i++]);
   Config::Set(Config::LayerType::LocalGame, Config::MAIN_OVERCLOCK, settings[i++] / 100.0f + FLT_EPSILON);
   Config::Set(Config::LayerType::LocalGame, Config::MAIN_JIT_FOLLOW_BRANCH, settings[i++]);
 
   SConfig::GetInstance().bSyncGPUOnSkipIdleHack = Config::Get(Config::MAIN_SYNC_ON_SKIP_IDLE);
+  SConfig::GetInstance().m_EmulationSpeed = Config::Get(Config::MAIN_EMULATION_SPEED);
   SConfig::GetInstance().m_OCEnable = Config::Get(Config::MAIN_OVERCLOCK_ENABLE);
   SConfig::GetInstance().m_OCFactor = Config::Get(Config::MAIN_OVERCLOCK);
   SConfig::GetInstance().bJITFollowBranch = Config::Get(Config::MAIN_JIT_FOLLOW_BRANCH);

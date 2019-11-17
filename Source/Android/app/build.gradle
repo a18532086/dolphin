@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         // TODO If this is ever modified, change application_id in strings.xml
-        applicationId "org.mm.j"
+        applicationId "org.ZLYJ"
         minSdkVersion 24
         targetSdkVersion 28
 
@@ -32,10 +32,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias 'dolphin-release-key'
-            keyPassword 'zhangwei'
-            storeFile file('D:/Android/android-sign-key/dolphin-release-key.jks')
-            storePassword 'zhangwei'
+            keyAlias 'key0'
+            keyPassword 'ZLYJ'
+            storeFile file('D:\\MyKey.jks')
+            storePassword 'ZLYJ'
         }
     }
 
@@ -100,7 +100,7 @@ def getVersion() {
         logger.error('Cannot find git, defaulting to dummy version number')
     }
 
-    return versionNumber + "-mmj"
+    return versionNumber + "-ZLYJ"
 }
 
 

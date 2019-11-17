@@ -44,14 +44,17 @@ public class RunningSettingDialog extends DialogFragment
     public static final int SETTING_ARBITRARY_MIPMAP_DETECTION = 4;
     public static final int SETTING_IMMEDIATE_XFB = 5;
     public static final int SETTING_DISPLAY_SCALE = 6;
+    public static final int SETTING_INTERNAL_RESOLUTION = 15;
     // core
     public static final int SETTING_SYNC_ON_SKIP_IDLE = 7;
+		public static final int SETTING_SPEED_LIMIT = 10;
     public static final int SETTING_OVERCLOCK_ENABLE = 8;
     public static final int SETTING_OVERCLOCK_PERCENT = 9;
-    public static final int SETTING_JIT_FOLLOW_BRANCH = 10;
-    public static final int SETTING_IR_WIDTH = 11;
-    public static final int SETTING_IR_HEIGHT = 12;
-    public static final int SETTING_IR_CENTER = 13;
+
+    public static final int SETTING_JIT_FOLLOW_BRANCH = 11;
+    public static final int SETTING_IR_WIDTH = 12;
+    public static final int SETTING_IR_HEIGHT = 13;
+    public static final int SETTING_IR_CENTER = 14;
     // pref
     public static final int SETTING_PHONE_RUMBLE = 100;
     public static final int SETTING_TOUCH_POINTER = 101;
@@ -241,11 +244,16 @@ public class RunningSettingDialog extends DialogFragment
       switch (item.getSetting())
       {
         case SettingsItem.SETTING_OVERCLOCK_PERCENT:
+				case SettingsItem.SETTING_SPEED_LIMIT:
           mSeekBar.setMax(300);
           break;
         case SettingsItem.SETTING_DISPLAY_SCALE:
           mSeekBar.setMax(200);
           break;
+				case SettingsItem.SETTING_INTERNAL_RESOLUTION:
+					mSeekBar.setMax(3);
+					mTextSettingValue.setText(getResources().getStringArray(R.array.internalResolutionEntries)[3]);
+					break;
         case SettingsItem.SETTING_IR_WIDTH:
         case SettingsItem.SETTING_IR_HEIGHT:
         case SettingsItem.SETTING_IR_CENTER:
@@ -265,6 +273,10 @@ public class RunningSettingDialog extends DialogFragment
             progress = (progress / 5) * 5;
             mTextSettingValue.setText(progress + "%");
           }
+          else if(mItem.getSetting() == SettingsItem.SETTING_INTERNAL_RESOLUTION)
+					{
+						mTextSettingValue.setText(getResources().getStringArray(R.array.internalResolutionEntries)[progress]);
+					}
           else
           {
             mTextSettingValue.setText(String.valueOf(progress));
@@ -284,7 +296,7 @@ public class RunningSettingDialog extends DialogFragment
 
         }
       });
-      mSeekBar.setProgress(item.getValue());
+      mSeekBar.setProgress(mItem.getValue());
     }
 
     @Override
@@ -344,10 +356,14 @@ public class RunningSettingDialog extends DialogFragment
         R.string.immediate_xfb, SettingsItem.TYPE_CHECKBOX, mRunningSettings[i++]));
       mSettings.add(new SettingsItem(SettingsItem.SETTING_DISPLAY_SCALE,
         R.string.setting_display_scale, SettingsItem.TYPE_SEEK_BAR, mRunningSettings[i++]));
+			mSettings.add(new SettingsItem(SettingsItem.SETTING_INTERNAL_RESOLUTION,
+				R.string.internal_resolution, SettingsItem.TYPE_SEEK_BAR, mRunningSettings[i++]));
 
       // core
       mSettings.add(new SettingsItem(SettingsItem.SETTING_SYNC_ON_SKIP_IDLE,
         R.string.sync_on_skip_idle, SettingsItem.TYPE_CHECKBOX, mRunningSettings[i++]));
+			mSettings.add(new SettingsItem(SettingsItem.SETTING_SPEED_LIMIT,
+				R.string.speed_limit, SettingsItem.TYPE_SEEK_BAR, mRunningSettings[i++]));
       mSettings.add(new SettingsItem(SettingsItem.SETTING_OVERCLOCK_ENABLE,
         R.string.overclock_enable, SettingsItem.TYPE_CHECKBOX, mRunningSettings[i++]));
       mSettings.add(new SettingsItem(SettingsItem.SETTING_OVERCLOCK_PERCENT,
@@ -490,6 +506,7 @@ public class RunningSettingDialog extends DialogFragment
     int columns = 1;
     Drawable lineDivider = getContext().getDrawable(R.drawable.line_divider);
     RecyclerView recyclerView = contents.findViewById(R.id.list_settings);
+    recyclerView.setItemViewCacheSize(20);
     RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), columns);
     recyclerView.setLayoutManager(layoutManager);
     mAdapter = new SettingsAdapter();

@@ -34,3 +34,6 @@ CMakeLists.txt.user
 *.kdev4
 # Ignore IDEA/Clion files/dirs
 /.idea/
+#ignore build temp
+Source/Android/app/.cxx/
+

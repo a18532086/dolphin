@@ -36,7 +36,7 @@ public final class MainPresenter
 
   public void onCreate()
   {
-    String versionName = "5.0(MMJ)";//BuildConfig.VERSION_NAME;
+    String versionName = "5.0(ZLYJ)";//BuildConfig.VERSION_NAME;
     mView.setVersionString(versionName);
 
     IntentFilter filter = new IntentFilter();
